@@ -1,7 +1,30 @@
 from ctypes import *
 import numpy as np
 
+
+
+attack_angles=np.array([-2, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
+
+coefficients=np.array([
+    #[-0.15, 0.005],
+    #[-0.05, 0.005],
+    #[0.05, 0.001],
+    [0.2, 0.005],
+    [0.35, 0.01],
+    [0.45, 0.02],
+    [0.55, 0.03],
+    [0.65, 0.05],
+    [0.75, 0.07],
+    [0.82, 0.09],
+    [0.9, 0.1],
+    [1.0, 0.13],
+    [1.08, 0.18],
+    [1.1, 0.18],
+    [1.05, 0.21]
+])
+bank_angles=np.array([-3, -2, -1, 0, 1, 2, 3])
 n_beta=10
+
 
 class vect(Structure):
     _fields_ = [
@@ -56,9 +79,9 @@ class kite(Structure):
         return "Position: "+str(self.position.theta)+","+str(self.position.phi)+","+str(self.position.r)+", Velocity"+ str(self.velocity.theta)+","+str(self.velocity.phi)+","+str(self.velocity.r)
     def simulate(self, step, force_):
         return libkite.simulation_step(pointer(self), step,force_)
-   # def evolve_system(self, attack_angle, bank_angle, integration_steps, step):
-     #   self.update_coefficients(attack_angle, bank_angle)
-       # return libkite.simulate(pointer(self), integration_steps, step)
+    def evolve_system(self, attack_angle, bank_angle, integration_steps, step,force_):
+        self.update_coefficients(attack_angle, bank_angle)
+        return libkite.simulate(pointer(self), integration_steps, step,force_)
     def evolve_system_2(self,integration_steps, step, force_):
         return libkite.simulate(pointer(self), integration_steps, step, force_)
     def beta(self):#, continuous=True):
@@ -79,7 +102,10 @@ class kite(Structure):
         a=libkite.getaccelerations(pointer(self),force_)
         return a.theta, a.phi, a.r
     def reward(self, learning_step, force_):
-        return libkite.getreward(pointer(self),force_)*learning_step
+        a=libkite.getreward(pointer(self),force_)
+        b = a*learning_step
+        #return (libkite.getreward(pointer(self),force_))*learning_step
+        return b   #*learning_step
     def update_coefficients(self, attack_angle, bank_angle):
         self.C_l, self.C_d = coefficients[attack_angle,0], coefficients[attack_angle,1]
         self.psi = np.deg2rad(bank_angles[bank_angle])

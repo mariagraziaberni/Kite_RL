@@ -38,7 +38,7 @@ class ReplayBuffer():
         
         self.reward_memory = np.zeros(self.mem_size) 
         
-        self.terminal_memory = np.zeros(self.mem_size, dtype = np.bool)
+        self.terminal_memory = np.zeros(self.mem_size, dtype = bool)
         
     def change_max_mem(self,num): 
     
@@ -125,6 +125,34 @@ class training_state():
         self.n_training = 0 
         
         self.final_position = [] 
+        
+        self.trajectory_actor = {"parameters": [], "gradients": []}
+        
+        self.trajectory_critic_1 = {"parameters": [], "gradients": []}
+        
+        self.trajectory_critic_2 = {"parameters": [], "gradients": []}
+        
+class training_state_2():
+
+    def __init__(self): 
+    
+        self.score_history = [] 
+        
+        self.true_score_history = []
+        
+        self.kwh_history = [] 
+        
+        self.counter = 0 
+        
+        self.best_score = -8000
+        
+        self.n_training = 0 
+        
+        self.final_position = [] 
+        
+        self.penalty_1 = None 
+        
+        self.penalty_2 = None 
         
         self.trajectory_actor = {"parameters": [], "gradients": []}
         

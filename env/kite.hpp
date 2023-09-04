@@ -40,11 +40,12 @@ public:
    // if(velocity.r>0) velocity.r=0;
     position.theta+=(velocity.theta*step);
     position.phi+=(velocity.phi*step);
+    if (velocity.r>0) {velocity.r = 0;} 
     position.r+=(velocity.r*step);
     if (position.r >100) {position.r = 100;
                           velocity.r= 0; 
                           } 
-    if (velocity.r>0) {velocity.r = 0;} 
+    
     if(position.theta>=pi/2) return 1;     
     return 0;
   }

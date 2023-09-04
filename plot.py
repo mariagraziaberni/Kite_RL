@@ -48,6 +48,7 @@ def main(args):
     beta=np.load(os.path.join(dir_test,"beta.npy"))
     wind=np.load(os.path.join(dir_test,"wind.npy"))
     applied_force = np.load(os.path.join(dir_test,"applied_force.npy"))
+    final_positions = np.load(os.path.join(dir_test,"final_positions.npy"))
 
     def plot_trajectory(x,y,z,num):
         fig = plt.figure(figsize=(16, 10))
@@ -135,29 +136,29 @@ def main(args):
 
     # THE DATA POINTS
     
-    dataSet = np.array([x, y, z])
-    numDataPoints = len(z)
+    #dataSet = np.array([x, y, z])
+    #numDataPoints = len(z)
 
     # GET SOME MATPLOTLIB OBJECTS
-    fig = plt.figure(figsize=(16, 10))
-    ax = Axes3D(fig)
-    ax.view_init(20, -112.5)
+    #fig = plt.figure(figsize=(16, 10))
+    #ax = Axes3D(fig)
+    #ax.view_init(20, -112.5)
 
 
     #ax.set_ylim(0, 400)
     #ax.set_xlim(0, 4000)
     #ax.set_zlim(0, 150)
-    line = ax.plot(dataSet[0], dataSet[1], dataSet[2], '-', lw=2)[0] # For line plot
-    redDots = plt.plot(dataSet[0], dataSet[1], dataSet[2], markerfacecolor='red', markeredgecolor='k', marker = "o", markersize=20, label='current position', linestyle='None')[0]
+    #line = ax.plot(dataSet[0], dataSet[1], dataSet[2], '-', lw=2)[0] # For line plot
+    #redDots = plt.plot(dataSet[0], dataSet[1], dataSet[2], markerfacecolor='red', markeredgecolor='k', marker = "o", markersize=20, label='current position', linestyle='None')[0]
     # NOTE: Can't pass empty arrays into 3d version of plot()
 
 
     # AXES PROPERTIES]
     # ax.set_xlim3d([limit0, limit1])
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    ax.set_title('Kite trajectory')
+    #ax.set_xlabel('X')
+    #ax.set_ylabel('Y')
+    #ax.set_zlabel('Z')
+    #ax.set_title('Kite trajectory')
     #a = Arrow3D([3000, 4000], [50, 50], [60, 60], mutation_scale=20, lw=1, arrowstyle="-|>", color="k")
     #b = Arrow3D([3000, 3800], [50, 50], [50, 50], mutation_scale=20, lw=1, arrowstyle="-|>", color="k")
     #c = Arrow3D([3000, 4200], [50, 50], [70, 70], mutation_scale=20, lw=1, arrowstyle="-|>", color="k")
@@ -170,17 +171,17 @@ def main(args):
     #ax.text(3000,50,80, "Wind", size=16)
     #ax.plot(x[-1],y[-1],z[-1],
             #markerfacecolor='red', markeredgecolor='k', marker = "o", markersize=20, label='final position', linestyle='None')
-    ax.plot(x[0],y[0],z[0],
-            markerfacecolor='green', markeredgecolor='k', marker = "o", markersize=20, label='starting position', linestyle='None')
+    #ax.plot(x[0],y[0],z[0],
+           # markerfacecolor='green', markeredgecolor='k', marker = "o", markersize=20, label='starting position', linestyle='None')
 
-    ax.plot(0,0,0,
-            markerfacecolor='orange', markeredgecolor='k', marker = "^", markersize=20, label='ground station', linestyle='None')
-    ax.legend(fontsize=15, bbox_to_anchor=(0.74, 0.3, 0.5, 0.5))
+    #ax.plot(0,0,0,
+         #   markerfacecolor='orange', markeredgecolor='k', marker = "^", markersize=20, label='ground station', linestyle='None')
+    #ax.legend(fontsize=15, bbox_to_anchor=(0.74, 0.3, 0.5, 0.5))
     # Creating the Animation object
-    line_ani = animation.FuncAnimation(fig, func, frames=numDataPoints, fargs=(dataSet,line,redDots), interval=200, blit=False)
+    #line_ani = animation.FuncAnimation(fig, func, frames=numDataPoints, fargs=(dataSet,line,redDots), interval=200, blit=False)
     #line_ani.save(path+'animation.gif')
-    line_ani.save(os.path.join(dir_test,"animation.gif"))
-    plt.close()
+    #line_ani.save(os.path.join(dir_test,"animation.gif"))
+    #plt.close()
 
 
     plt.style.use(['seaborn-whitegrid','tableau-colorblind10'])
@@ -207,6 +208,13 @@ def main(args):
             
     plt.savefig(file_name, dpi=200)
             
+    plt.close()
+    
+    file_n = os.path.join(dir_test,"final_positions.png")
+    plt.figure(figsize=(10,6))
+    plt.title("Final Positions") 
+    plt.plot(final_positions)
+    plt.savefig(file_n, dpi=200)
     plt.close()
     file_name = os.path.join(dir_test,"applied_force_on_kite.png")
     plt.figure(figsize=(10,6))
